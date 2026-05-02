@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CyberBase - Compliance Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-surface": "#2f3036",
+                        "secondary-container": "#d0e1fb",
+                        "tertiary": "#4b1c00",
+                        "surface-bright": "#faf8ff",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-dim": "#dad9e1",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f1f0f7",
+                        "on-tertiary-fixed": "#341100",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-tint": "#4059aa",
+                        "inverse-primary": "#b6c4ff",
+                        "primary": "#00236f",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#505f76",
+                        "on-surface-variant": "#444651",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-surface": "#1a1b21",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#1e3a8a",
+                        "surface-container": "#eeedf4",
+                        "primary-fixed": "#dce1ff",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1a1b21",
+                        "on-primary-container": "#90a8ff",
+                        "tertiary-fixed-dim": "#ffb691",
+                        "on-primary-fixed-variant": "#264191",
+                        "tertiary-container": "#6e2c00",
+                        "outline-variant": "#c5c5d3",
+                        "on-tertiary-fixed-variant": "#773205",
+                        "surface-container-highest": "#e3e1e9",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-tertiary-container": "#f39461",
+                        "surface-container-high": "#e9e7ef",
+                        "surface-container-low": "#f4f3fa",
+                        "on-primary-fixed": "#00164e",
+                        "surface": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcb",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "error-container": "#ffdad6",
+                        "background": "#faf8ff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#757682",
+                        "surface-variant": "#e3e1e9"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "sm": "0.25rem",
+                        "md": "0.75rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "unit": "8px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "margin-page": "40px"
+                    },
+                    fontFamily: {
+                        "body-md": ["Inter", "sans-serif"],
+                        "caption-xs": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "display-xl": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    fontSize: {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "caption-xs": ["12px", { "lineHeight": "16px", "fontWeight": "500", "letterSpacing": "0.05em" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    },
+                    boxShadow: {
+                        'ambient-1': '0 2px 4px rgba(30, 58, 138, 0.05)',
+                        'ambient-2': '0 10px 15px rgba(30, 58, 138, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for spreadsheet feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c5c5d3;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #757682;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased h-screen flex overflow-hidden">
+<!-- Sidebar (Shared Component Logic Applied) -->
+<aside class="w-[280px] flex-shrink-0 bg-surface border-r border-outline-variant flex flex-col h-full shadow-ambient-1 z-10">
+<div class="p-lg flex flex-col h-full">
+<!-- Brand / User Info -->
+<div class="flex items-center gap-md mb-xl">
+<div class="bg-surface-variant bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10 flex-shrink-0" data-alt="A professional corporate headshot of a cybersecurity analyst. The individual is looking directly at the camera with a calm, focused expression. The lighting is bright and modern, utilizing a soft high-key setup that complements a minimalist light-mode aesthetic. The background is a pure, clean white, emphasizing the subject and aligning with a premium, high-trust SaaS platform style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDw5T_u8OfzdQcJknCNA1f2Tfx0Hq0H5x0U8v7d22i6rAztvsTjEG3-tYm9A0u_dGAsTfSvbVKmSbR9jUHJNY6kKk5Vt7lsJhUYc-ZMYwfsXgBGUG7-xppVSms-u0eV-Tr4Y9xe3t8axNSkGRkWGf4gsfPMs2rd-3cDD4fk0BWXmW3JZ4jaQd3FEDL44YmaLJAsI75VZjdendtTKOk_wNKrTk9sMyJa3zpDrfGmNUubxZ3TiJIgQAFKFDrnOG5lYHTlyt7aP35wqp0');"></div>
+<div class="flex flex-col overflow-hidden">
+<h1 class="text-on-surface font-label-sm truncate">Admin Panel</h1>
+<p class="text-on-surface-variant font-caption-xs truncate">City Grid</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-sm flex-1">
+<a class="flex items-center gap-md px-md py-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors group" href="#">
+<div class="text-on-surface-variant group-hover:text-primary transition-colors flex items-center justify-center" data-icon="House" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined" style="font-size: 24px;">house</span>
+</div>
+<span class="font-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors group" href="#">
+<div class="text-on-surface-variant group-hover:text-primary transition-colors flex items-center justify-center" data-icon="MapPin" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined" style="font-size: 24px;">map_pin_review</span>
+</div>
+<span class="font-label-sm">Map</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors group" href="#">
+<div class="text-on-surface-variant group-hover:text-primary transition-colors flex items-center justify-center" data-icon="Clock" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined" style="font-size: 24px;">calendar_clock</span>
+</div>
+<span class="font-label-sm">History</span>
+</a>
+<!-- Active State -->
+<a class="flex items-center gap-md px-md py-sm rounded-DEFAULT bg-secondary-container text-on-secondary-container border-l-[3px] border-primary" href="#">
+<div class="text-primary flex items-center justify-center" data-icon="Shield" data-size="24px" data-weight="fill">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px; font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<span class="font-label-sm font-semibold">Compliance Vault</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<a class="flex items-center gap-md px-md py-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container hover:text-error transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-error">logout</span>
+<span class="font-label-sm">Sign Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full bg-background overflow-hidden relative">
+<!-- Header -->
+<header class="h-[80px] px-margin-page border-b border-outline-variant bg-surface flex items-center justify-between shadow-ambient-1 shrink-0 z-10">
+<div class="flex items-center gap-md">
+<div class="h-10 w-10 rounded-DEFAULT bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<h2 class="text-on-surface font-headline-lg">Compliance Vault</h2>
+</div>
+<button class="flex items-center justify-center gap-sm px-lg py-sm bg-primary text-on-primary rounded-DEFAULT hover:bg-primary-container transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-fixed-dim focus:ring-offset-2">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+<span class="font-label-sm">Export PDF Audit Report</span>
+</button>
+</header>
+<!-- Content Body -->
+<div class="flex-1 overflow-auto p-margin-page">
+<!-- Context Text -->
+<div class="mb-lg max-w-3xl">
+<p class="font-body-md text-on-surface-variant">
+                    Immutable audit trail of all system and user actions. Records displayed below are permanently logged and cryptographically secured. Data is presented in read-only format for compliance verification.
+                </p>
+</div>
+<!-- Table Container (Spreadsheet Style) -->
+<div class="bg-surface border border-outline-variant rounded-lg shadow-ambient-1 overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-lg py-md font-caption-xs text-on-surface-variant uppercase whitespace-nowrap w-[220px]">Timestamp (UTC)</th>
+<th class="px-lg py-md font-caption-xs text-on-surface-variant uppercase whitespace-nowrap w-[180px]">Incident ID</th>
+<th class="px-lg py-md font-caption-xs text-on-surface-variant uppercase whitespace-nowrap">Action Taken</th>
+<th class="px-lg py-md font-caption-xs text-on-surface-variant uppercase whitespace-nowrap w-[200px]">Actor</th>
+<th class="px-lg py-md font-caption-xs text-on-surface-variant uppercase whitespace-nowrap w-[140px]">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface-variant">2023-10-27 10:00:00</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface">INC-001</span>
+</td>
+<td class="px-lg py-md">
+<span class="font-body-md text-on-surface">Issue Created: Anomalous Login Detected</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-label-sm text-[10px]">JD</div>
+<span class="font-body-md text-on-surface-variant">John Doe</span>
+</div>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-surface-variant text-on-surface font-label-sm text-[12px] border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-outline mr-sm"></span> Open
+                                    </span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface-variant">2023-10-27 10:15:00</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface">INC-001</span>
+</td>
+<td class="px-lg py-md">
+<span class="font-body-md text-on-surface">Status Updated: Investigation Initiated</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-label-sm text-[10px]">JS</div>
+<span class="font-body-md text-on-surface-variant">Jane Smith</span>
+</div>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-sm animate-pulse"></span> In Progress
+                                    </span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface-variant">2023-10-27 11:30:00</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface">INC-002</span>
+</td>
+<td class="px-lg py-md">
+<span class="font-body-md text-on-surface">Issue Created: Firewall Rule Modified</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-label-sm text-[10px]">AJ</div>
+<span class="font-body-md text-on-surface-variant">Alice Johnson</span>
+</div>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-surface-variant text-on-surface font-label-sm text-[12px] border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-outline mr-sm"></span> Open
+                                    </span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors bg-surface-container-lowest/50">
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface-variant">2023-10-27 12:00:00</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface">INC-002</span>
+</td>
+<td class="px-lg py-md">
+<span class="font-body-md text-on-surface">Resolved: Rule Reverted to Baseline</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-error-container flex items-center justify-center text-on-error-container font-label-sm text-[10px]">BB</div>
+<span class="font-body-md text-on-surface-variant">Bob Brown</span>
+</div>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[12px]">
+<span class="material-symbols-outlined text-[14px] mr-xs">check_circle</span> Closed
+                                    </span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface-variant">2023-10-27 13:45:00</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface">INC-003</span>
+</td>
+<td class="px-lg py-md">
+<span class="font-body-md text-on-surface">Issue Created: API Rate Limit Exceeded</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline-variant text-[24px]">robot_2</span>
+<span class="font-body-md text-on-surface-variant">System Monitor</span>
+</div>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-surface-variant text-on-surface font-label-sm text-[12px] border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-outline mr-sm"></span> Open
+                                    </span>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface-variant">2023-10-27 14:02:11</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface">INC-003</span>
+</td>
+<td class="px-lg py-md">
+<span class="font-body-md text-on-surface">Status Updated: Automated Block Applied</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">smart_toy</span>
+<span class="font-body-md text-on-surface-variant">SOAR Engine</span>
+</div>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-sm animate-pulse"></span> In Progress
+                                    </span>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="hover:bg-surface-container-lowest transition-colors bg-surface-container-lowest/50">
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface-variant">2023-10-27 15:30:45</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="font-mono text-sm text-on-surface">AUD-099</span>
+</td>
+<td class="px-lg py-md">
+<span class="font-body-md text-on-surface">Admin Action: Policy Vault Decrypted</span>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-label-sm text-[10px]">CD</div>
+<span class="font-body-md text-on-surface-variant text-error font-medium">Charlie Davis</span>
+</div>
+</td>
+<td class="px-lg py-md whitespace-nowrap">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[12px]">
+<span class="material-symbols-outlined text-[14px] mr-xs">lock_open</span> Logged
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer Area -->
+<div class="bg-surface-container-low border-t border-outline-variant px-lg py-sm flex items-center justify-between">
+<span class="font-caption-xs text-on-surface-variant">Showing 1 to 7 of 1,248 entries</span>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-surface-variant text-on-surface-variant transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-sm bg-primary text-on-primary font-label-sm transition-colors">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-surface-variant text-on-surface transition-colors font-label-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-surface-variant text-on-surface transition-colors font-label-sm">3</button>
+<span class="w-8 h-8 flex items-center justify-center text-on-surface-variant font-label-sm">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-surface-variant text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

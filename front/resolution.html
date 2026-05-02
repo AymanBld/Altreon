@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Incident Resolution Report - CyberBase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#101412",
+                        "on-secondary-fixed": "#0b1c30",
+                        "tertiary-fixed-dim": "#e1c290",
+                        "on-tertiary-container": "#786137",
+                        "surface-bright": "#363a37",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed-variant": "#58431d",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-secondary": "#213145",
+                        "surface-dim": "#101412",
+                        "on-background": "#e0e3df",
+                        "surface-container-lowest": "#0b0f0d",
+                        "secondary-container": "#3a4a5f",
+                        "surface-container-highest": "#323633",
+                        "inverse-primary": "#1b6b4f",
+                        "surface-variant": "#323633",
+                        "primary-fixed-dim": "#8bd6b4",
+                        "on-error": "#690005",
+                        "tertiary-container": "#fedeaa",
+                        "surface-container": "#1c201e",
+                        "primary": "#ffffff",
+                        "outline-variant": "#3f4943",
+                        "primary-container": "#a6f2cf",
+                        "surface-container-high": "#272b28",
+                        "primary-fixed": "#a6f2cf",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#002115",
+                        "inverse-on-surface": "#2d312f",
+                        "on-primary-fixed-variant": "#00513a",
+                        "tertiary": "#ffffff",
+                        "background": "#101412",
+                        "on-tertiary": "#402d08",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-primary": "#003827",
+                        "on-secondary-container": "#a9bad3",
+                        "secondary": "#b7c8e1",
+                        "on-surface": "#e0e3df",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#bec9c2",
+                        "tertiary-fixed": "#fedeaa",
+                        "inverse-surface": "#e0e3df",
+                        "surface-tint": "#8bd6b4",
+                        "surface-container-low": "#181c1a",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#247155",
+                        "outline": "#89938c",
+                        "on-tertiary-fixed": "#271900"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "margin": "32px",
+                        "unit": "4px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "2xl": "64px",
+                        "gutter": "20px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono-label": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "display-md": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "mono-data": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "mono-label": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(10, 30, 51, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(137, 147, 140, 0.1);
+            box-shadow: 0 24px 48px -12px rgba(2, 8, 16, 0.8);
+        }
+        .input-glass {
+            background: rgba(5, 20, 36, 0.5);
+            border: 1px solid rgba(137, 147, 140, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+        .input-glass:focus {
+            border-color: #A7F3D0;
+            box-shadow: 0 0 0 2px rgba(167, 243, 208, 0.1);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-[#051424] text-on-surface font-body-md min-h-screen flex flex-col md:flex-row antialiased">
+<!-- TopNavBar (Mobile) -->
+<header class="md:hidden flex justify-between items-center px-6 h-16 z-50 bg-slate-950/70 backdrop-blur-xl border-b border-slate-800/50 shadow-[0_8px_32px_0_rgba(2,8,16,0.8)] sticky top-0">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-emerald-300" data-icon="security" data-weight="fill" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-sans text-sm tracking-tight text-xl font-bold tracking-tighter text-emerald-300">CyberBase</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-slate-400" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="settings">settings</span>
+</div>
+</header>
+<!-- SideNavBar (Web) -->
+<nav class="hidden md:flex flex-col py-8 gap-4 bg-slate-950/80 backdrop-blur-2xl fixed left-0 h-full w-64 border-r border-slate-800/50 shadow-2xl z-40">
+<div class="px-6 mb-8 hidden">
+<div class="font-display-md text-display-md text-emerald-300">CyberBase</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Security Ops</div>
+</div>
+<div class="flex flex-col gap-sm px-4 flex-1">
+<a class="flex items-center gap-md px-4 py-3 rounded-DEFAULT text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-mono text-xs uppercase tracking-widest">Overview</span>
+</a>
+<a class="flex items-center gap-md px-4 py-3 rounded-DEFAULT bg-emerald-400/10 text-emerald-300 border-r-2 border-emerald-300 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-mono text-xs uppercase tracking-widest">Triage</span>
+</a>
+<a class="flex items-center gap-md px-4 py-3 rounded-DEFAULT text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-mono text-xs uppercase tracking-widest">Automation</span>
+</a>
+<a class="flex items-center gap-md px-4 py-3 rounded-DEFAULT text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-mono text-xs uppercase tracking-widest">Logs</span>
+</a>
+<a class="flex items-center gap-md px-4 py-3 rounded-DEFAULT text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="font-mono text-xs uppercase tracking-widest">Compliance</span>
+</a>
+</div>
+<div class="flex flex-col gap-sm px-4 mt-auto">
+<a class="flex items-center gap-md px-4 py-3 rounded-DEFAULT text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-mono text-xs uppercase tracking-widest">Support</span>
+</a>
+<a class="flex items-center gap-md px-4 py-3 rounded-DEFAULT text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-mono text-xs uppercase tracking-widest">Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-6 md:p-margin xl:p-xl max-w-7xl mx-auto w-full">
+<!-- Header -->
+<div class="mb-lg border-b border-surface-variant pb-md flex justify-between items-end">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<span class="text-error bg-error/10 px-2 py-0.5 rounded-sm font-mono-label text-mono-label border border-error/20">SEV-1</span>
+<span class="text-on-surface-variant font-mono-label text-mono-label">INC-2023-0892</span>
+</div>
+<h1 class="font-display-md text-display-md text-on-surface">Incident Resolution Report</h1>
+</div>
+<div class="hidden sm:block text-right">
+<div class="text-on-surface-variant font-body-sm text-body-sm">Status</div>
+<div class="text-primary-container font-mono-data text-mono-data">Pending Closure</div>
+</div>
+</div>
+<!-- Form Grid -->
+<form class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Left Column: Primary Inputs -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<!-- Root Cause Analysis -->
+<div class="glass-panel rounded-xl p-lg">
+<div class="flex items-center gap-sm border-b border-surface-variant pb-sm mb-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="troubleshoot">troubleshoot</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Root Cause Analysis</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Provide a detailed technical breakdown of the vulnerability or failure point that led to the incident.</p>
+<textarea class="w-full h-40 input-glass rounded-lg p-md text-on-surface font-mono-data text-mono-data resize-y" placeholder="Describe technical root cause here..."></textarea>
+</div>
+<!-- Resolution Summary -->
+<div class="glass-panel rounded-xl p-lg">
+<div class="flex items-center gap-sm border-b border-surface-variant pb-sm mb-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="build_circle">build_circle</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Resolution Summary</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Outline the definitive actions taken to neutralize the threat and restore normal operations.</p>
+<textarea class="w-full h-32 input-glass rounded-lg p-md text-on-surface font-mono-data text-mono-data resize-y" placeholder="Summarize resolution actions..."></textarea>
+</div>
+</div>
+<!-- Right Column: Meta & Actions -->
+<div class="lg:col-span-4 flex flex-col gap-lg">
+<!-- Remediation Steps Checklist -->
+<div class="glass-panel rounded-xl p-lg">
+<div class="flex items-center gap-sm border-b border-surface-variant pb-sm mb-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="checklist">checklist</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Remediation Steps</h3>
+</div>
+<div class="flex flex-col gap-md">
+<label class="flex items-start gap-md cursor-pointer group">
+<div class="relative flex items-center mt-1">
+<input class="peer appearance-none w-5 h-5 border-2 border-outline rounded-sm bg-transparent checked:bg-primary-container checked:border-primary-container transition-colors" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-[#0A1E33] text-[16px] pointer-events-none opacity-0 peer-checked:opacity-100 left-0.5 top-0.5" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface group-hover:text-primary-container transition-colors">Isolate Affected Nodes</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Network segment quarantined.</div>
+</div>
+</label>
+<label class="flex items-start gap-md cursor-pointer group">
+<div class="relative flex items-center mt-1">
+<input class="peer appearance-none w-5 h-5 border-2 border-outline rounded-sm bg-transparent checked:bg-primary-container checked:border-primary-container transition-colors" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-[#0A1E33] text-[16px] pointer-events-none opacity-0 peer-checked:opacity-100 left-0.5 top-0.5" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface group-hover:text-primary-container transition-colors">Patch Vulnerability</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Apply security hotfix v2.4.1.</div>
+</div>
+</label>
+<label class="flex items-start gap-md cursor-pointer group">
+<div class="relative flex items-center mt-1">
+<input class="peer appearance-none w-5 h-5 border-2 border-outline rounded-sm bg-transparent checked:bg-primary-container checked:border-primary-container transition-colors" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-[#0A1E33] text-[16px] pointer-events-none opacity-0 peer-checked:opacity-100 left-0.5 top-0.5" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface group-hover:text-primary-container transition-colors">Rotate Credentials</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Invalidate compromised keys.</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Final Status & Submission -->
+<div class="glass-panel rounded-xl p-lg mt-auto">
+<div class="mb-lg">
+<label class="block font-mono-label text-mono-label text-on-surface-variant mb-xs uppercase tracking-widest">Final Status</label>
+<div class="relative">
+<select class="w-full appearance-none input-glass rounded-lg py-3 px-4 text-on-surface font-body-md text-body-md">
+<option value="resolved">Resolved - Monitoring</option>
+<option value="closed">Closed - Verified</option>
+<option value="escalated">Escalated - External Review</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-3.5 text-on-surface-variant pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<button class="w-full bg-[#A7F3D0] hover:bg-[#8bd6b4] text-[#051424] font-headline-md text-headline-md py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-sm group" type="submit">
+<span class="material-symbols-outlined" data-icon="lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        Submit &amp; Lock Record
+                    </button>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-sm text-center">This action will append to the immutable audit log.</p>
+</div>
+</div>
+</form>
+</main>
+</body></html>

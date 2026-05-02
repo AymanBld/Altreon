@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Incident Details - CyberBase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#101412",
+                        "on-secondary-fixed": "#0b1c30",
+                        "tertiary-fixed-dim": "#e1c290",
+                        "on-tertiary-container": "#786137",
+                        "surface-bright": "#363a37",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed-variant": "#58431d",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-secondary": "#213145",
+                        "surface-dim": "#101412",
+                        "on-background": "#e0e3df",
+                        "surface-container-lowest": "#0b0f0d",
+                        "secondary-container": "#3a4a5f",
+                        "surface-container-highest": "#323633",
+                        "inverse-primary": "#1b6b4f",
+                        "surface-variant": "#323633",
+                        "primary-fixed-dim": "#8bd6b4",
+                        "on-error": "#690005",
+                        "tertiary-container": "#fedeaa",
+                        "surface-container": "#1c201e",
+                        "primary": "#ffffff",
+                        "outline-variant": "#3f4943",
+                        "primary-container": "#a6f2cf",
+                        "surface-container-high": "#272b28",
+                        "primary-fixed": "#a6f2cf",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#002115",
+                        "inverse-on-surface": "#2d312f",
+                        "on-primary-fixed-variant": "#00513a",
+                        "tertiary": "#ffffff",
+                        "background": "#101412",
+                        "on-tertiary": "#402d08",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-primary": "#003827",
+                        "on-secondary-container": "#a9bad3",
+                        "secondary": "#b7c8e1",
+                        "on-surface": "#e0e3df",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#bec9c2",
+                        "tertiary-fixed": "#fedeaa",
+                        "inverse-surface": "#e0e3df",
+                        "surface-tint": "#8bd6b4",
+                        "surface-container-low": "#181c1a",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#247155",
+                        "outline": "#89938c",
+                        "on-tertiary-fixed": "#271900"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "margin": "32px",
+                        "unit": "4px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "2xl": "64px",
+                        "gutter": "20px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono-label": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "display-md": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "mono-data": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "mono-label": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #051424; color: #e0e3df; }
+        .glass-surface { background: rgba(10, 30, 51, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(137, 147, 140, 0.1); }
+        .ambient-shadow { box-shadow: 0 12px 32px 0 rgba(2, 8, 16, 0.6); }
+        .tech-input:focus { border-color: #a6f2cf; box-shadow: 0 0 0 1px rgba(166, 242, 207, 0.2); }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col py-8 gap-4 bg-slate-950/80 backdrop-blur-2xl fixed left-0 h-full w-64 border-r border-slate-800/50 shadow-2xl z-40">
+<div class="px-6 mb-8 hidden">
+<span class="text-emerald-300 font-bold tracking-tighter text-xl">CyberBase</span>
+</div>
+<div class="flex-1 flex flex-col gap-2 px-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-emerald-200" data-icon="dashboard">dashboard</span>
+<span class="font-mono text-xs uppercase tracking-widest text-mono-label font-mono-label">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-emerald-400/10 text-emerald-300 border-r-2 border-emerald-300 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="security">security</span>
+<span class="font-mono text-xs uppercase tracking-widest text-mono-label font-mono-label">Triage</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-emerald-200" data-icon="bolt">bolt</span>
+<span class="font-mono text-xs uppercase tracking-widest text-mono-label font-mono-label">Automation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-emerald-200" data-icon="database">database</span>
+<span class="font-mono text-xs uppercase tracking-widest text-mono-label font-mono-label">Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-emerald-200" data-icon="verified_user">verified_user</span>
+<span class="font-mono text-xs uppercase tracking-widest text-mono-label font-mono-label">Compliance</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-2 px-4 pt-4 border-t border-slate-800/50">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-emerald-200" data-icon="help">help</span>
+<span class="font-mono text-xs uppercase tracking-widest text-mono-label font-mono-label">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-slate-800/30 hover:text-slate-100 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-emerald-200" data-icon="logout">logout</span>
+<span class="font-mono text-xs uppercase tracking-widest text-mono-label font-mono-label">Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full border-b border-slate-800/50 shadow-[0_8px_32px_0_rgba(2,8,16,0.8)] flex justify-between items-center px-6 h-16 z-50 bg-slate-950/70 backdrop-blur-xl md:pl-[17rem]">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tighter text-emerald-300 font-headline-lg text-headline-lg">CyberBase</span>
+</div>
+<div class="flex items-center gap-lg">
+<button class="text-slate-400 hover:bg-slate-800/50 hover:text-emerald-200 transition-colors duration-200 ease-in-out p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-slate-800/50 hover:text-emerald-200 transition-colors duration-200 ease-in-out p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="bg-emerald-300 text-slate-900 px-4 py-2 rounded-md font-sans text-sm tracking-tight flex items-center gap-2 hover:bg-emerald-200 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="shield">shield</span>
+                Shield
+             </button>
+<img alt="Security Analyst Profile" class="w-8 h-8 rounded-full border border-slate-700" data-alt="A close up portrait of a male security analyst in a modern, dark high-tech control room. The lighting is cinematic, with cool blue and emerald green hues reflecting off glass surfaces, emphasizing the serious, focused mood of the cybersecurity environment. The background is slightly blurred showing multiple screens with data." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYik6LLbU6I32JgJNtCWSpT_3VgAvxS6S8pPgZVWB5i-ZMZO96xvihPQ95z13rRnn_9a20IC2IVYr1iDgMZIIuXQDQ5NjXRNcz1UngFyt77Dz2fz3b0yzEFYiItAWpw_u_cedcKq9wQSdJW_QLi8YqSY2mxDG25wG0I9p96xSQiPTJlflYsCjqLnt_L19aKi0aJlKPdWrOAPKAvRsXDRy-DSfCKLv6vqpxTZXV1ekxXesDuR4dDSBNOFM0kf0jc8Jqiosw8MOkD0E"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-16 md:ml-64 p-lg lg:p-margin xl:p-xl max-w-7xl mx-auto w-full relative">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-lg gap-4">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-1 rounded bg-error/10 text-error font-mono text-xs font-mono-label">CRITICAL</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface m-0">Ransomware Alert #INC-9902</h1>
+</div>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Detected anomalous encryption activity across multiple endpoints.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 border border-outline-variant rounded bg-transparent text-on-surface hover:bg-surface-variant transition-colors font-body-sm text-body-sm">Acknowledge</button>
+<button class="px-4 py-2 rounded bg-primary-container text-on-primary-fixed font-body-sm text-body-sm hover:bg-primary-fixed-dim transition-colors shadow-sm">Resolve Incident</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Left Column (Main Details) -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-lg">
+<!-- Incident Information -->
+<section class="glass-surface rounded-xl p-lg ambient-shadow">
+<div class="border-b border-outline-variant/30 pb-md mb-md flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface m-0 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="info">info</span>
+                            Incident Information
+                        </h2>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<span class="block text-on-surface-variant font-mono-label text-mono-label mb-1">REPORTER</span>
+<span class="block text-on-surface font-body-md text-body-md">Automated Detection (EDR)</span>
+</div>
+<div>
+<span class="block text-on-surface-variant font-mono-label text-mono-label mb-1">DATE / TIME</span>
+<span class="block text-on-surface font-mono-data text-mono-data">2023-10-27T08:14:32Z</span>
+</div>
+<div>
+<span class="block text-on-surface-variant font-mono-label text-mono-label mb-1">AFFECTED ASSETS</span>
+<span class="block text-on-surface font-mono-data text-mono-data">SRV-FIN-01, SRV-FIN-02</span>
+</div>
+<div>
+<span class="block text-on-surface-variant font-mono-label text-mono-label mb-1">SEVERITY SCORE</span>
+<span class="block text-error font-mono-data text-mono-data">9.8/10</span>
+</div>
+</div>
+</section>
+<!-- Automated Triage Data -->
+<section class="glass-surface rounded-xl p-lg ambient-shadow">
+<div class="border-b border-outline-variant/30 pb-md mb-md flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface m-0 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="smart_toy">smart_toy</span>
+                            Automated Triage Data
+                        </h2>
+</div>
+<div class="space-y-4">
+<div class="p-md rounded bg-surface-container-low border border-outline-variant/50">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-2">AI Summary</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm leading-relaxed">
+                                Initial analysis indicates a rapid encryption event originating from a compromised service account (svc_backup). The malware signature closely matches a known variant of LockBit 3.0. Lateral movement detected across VLAN 40 (Finance).
+                            </p>
+</div>
+<div class="flex flex-col gap-2 relative pl-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant/50">
+<div class="relative">
+<span class="absolute -left-6 top-1 w-2 h-2 rounded-full bg-primary-fixed shadow-[0_0_8px_rgba(166,242,207,0.6)]"></span>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-xs block mb-1">08:14:32Z</span>
+<p class="text-on-surface font-body-sm text-body-sm bg-surface-container p-3 rounded border border-outline-variant/30">Mass file modification detected on SRV-FIN-01.</p>
+</div>
+<div class="relative">
+<span class="absolute -left-6 top-1 w-2 h-2 rounded-full bg-primary-fixed shadow-[0_0_8px_rgba(166,242,207,0.6)]"></span>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-xs block mb-1">08:15:10Z</span>
+<p class="text-on-surface font-body-sm text-body-sm bg-surface-container p-3 rounded border border-outline-variant/30">Process 'vssadmin.exe delete shadows' blocked by EDR.</p>
+</div>
+<div class="relative">
+<span class="absolute -left-6 top-1 w-2 h-2 rounded-full bg-error shadow-[0_0_8px_rgba(255,180,171,0.6)]"></span>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-xs block mb-1">08:16:05Z</span>
+<p class="text-on-surface font-body-sm text-body-sm bg-surface-container p-3 rounded border border-error/30">Outbound C2 connection established to known malicious IP (192.0.2.144).</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column (Sidebar Actions/Comments) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-lg">
+<!-- Comment Section -->
+<section class="glass-surface rounded-xl p-lg ambient-shadow flex-1 flex flex-col">
+<div class="border-b border-outline-variant/30 pb-md mb-md">
+<h2 class="font-headline-md text-headline-md text-on-surface m-0 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chat">chat</span>
+                            Investigation Notes
+                        </h2>
+</div>
+<div class="flex-1 overflow-y-auto min-h-[200px] mb-4 space-y-4">
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/30">
+<div class="flex justify-between items-center mb-2">
+<span class="font-body-sm text-body-sm font-semibold text-primary-fixed">J. Doe (L2 Analyst)</span>
+<span class="font-mono-data text-mono-data text-xs text-on-surface-variant">10 mins ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">I've isolated SRV-FIN-01 and 02 from the network. Pulling memory dumps now for further analysis.</p>
+</div>
+</div>
+<div class="mt-auto">
+<label class="sr-only" for="comment">Add Comment</label>
+<textarea class="w-full bg-surface-container-highest border border-outline-variant rounded-lg p-3 text-on-surface font-body-sm text-body-sm tech-input focus:outline-none focus:ring-0 resize-none" id="comment" placeholder="Add investigation notes or commands..." rows="3"></textarea>
+<div class="flex justify-end mt-3">
+<button class="px-4 py-2 rounded bg-surface-variant text-on-surface font-body-sm text-body-sm border border-outline-variant hover:bg-outline-variant transition-colors">Post Note</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>
