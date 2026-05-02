@@ -6,6 +6,7 @@ import TriageCommandCenter from './components/admin/TriageCommandCenter';
 import ComplianceVault from './components/admin/ComplianceVault';
 import IncidentDetails from './components/admin/IncidentDetails';
 import ResolutionReport from './components/admin/ResolutionReport';
+import SolvedIncidentDetails from './components/admin/SolvedIncidentDetails';
 
 import ReporterWizard from './components/user/ReporterWizard';
 
@@ -49,6 +50,7 @@ function AppContent() {
         <Route path="compliance" element={<ComplianceVault />} />
         <Route path="incident/:id" element={<IncidentDetails />} />
         <Route path="resolution/:id" element={<ResolutionReport />} />
+        <Route path="solved-incident/:id" element={<SolvedIncidentDetails />} />
       </Route>
       {/* Catch-all to redirect back to admin if in admin mode but path doesn't match */}
       <Route path="*" element={<Navigate to="/admin" replace />} />
