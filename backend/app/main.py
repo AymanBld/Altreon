@@ -1,10 +1,13 @@
 import os
 import json
 from datetime import datetime, timedelta
+from pathlib import Path
 import uuid
 
 from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text, Boolean
@@ -489,6 +492,13 @@ async def send_incident_notifications(incident_id: int, description: str, severi
 # ==========================================
 
 app = FastAPI(title="ALTREON - Cyber Triage MVP")
+
+FRONTEND_DIST = Path(__file__).resolve().parents[2] / "front" / "dist"
+FRONTEND_INDEX = FRONTEND_DIST / "index.html"
+FRONTEND_ASSETS = FRONTEND_DIST / "assets"
+
+if FRONTEND_ASSETS.exists():
+    app.mount("/assets", StaticFiles(directory=FRONTEND_ASSETS), name="frontend-assets")
 
 app.add_middleware(
     CORSMiddleware,
@@ -1057,3 +1067,24 @@ async def get_admin_profile(authorization: str = None):
         "email": admin["email"],
         "fcm_device_token": admin["fcm_device_token"]
     }
+
+
+def serve_frontend_app():
+    """Serve the built React app for browser routes handled by React Router."""
+    if FRONTEND_INDEX.exists():
+        return FileResponse(FRONTEND_INDEX)
+    raise HTTPException(
+        status_code=404,
+        detail="Frontend build not found. Build the front app or deploy it as a Render Static Site.",
+    )
+
+
+@app.get("/", include_in_schema=False)
+def serve_user_portal():
+    return serve_frontend_app()
+
+
+@app.get("/admin", include_in_schema=False)
+@app.get("/admin/{path:path}", include_in_schema=False)
+def serve_admin_portal(path: str = ""):
+    return serve_frontend_app()
