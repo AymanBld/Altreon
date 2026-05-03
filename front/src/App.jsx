@@ -19,15 +19,6 @@ function AppContent() {
           <div className="flex-1 w-full h-full relative">
             <ReporterWizard onComplete={() => alert('Incident reported successfully!')} />
             
-            {/* Quick Link to Admin (Dev Only) */}
-            <div className="absolute top-4 right-4 z-50">
-              <a 
-                href="/admin" 
-                className="px-3 py-1.5 bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full text-xs font-medium border border-slate-700 transition-all backdrop-blur-sm"
-              >
-                Admin Portal →
-              </a>
-            </div>
           </div>
         </div>
       } />
