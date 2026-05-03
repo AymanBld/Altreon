@@ -40,3 +40,23 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Flask / FastAPI runtime
+instance/
+.webassets-cache
+
+# Firebase / service-account credentials
+*firebase-adminsdk*.json
+serviceAccountKey.json
+*.pem
+*.key
+
+# SQLite journals
+*.db-journal

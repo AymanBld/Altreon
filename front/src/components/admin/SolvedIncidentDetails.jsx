@@ -1,16 +1,60 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
 export default function SolvedIncidentDetails() {
   const { id } = useParams();
+  const [incident, setIncident] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetchIncident();
+  }, [id]);
+
+  const fetchIncident = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/incident/${id}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch incident (${response.status})`);
+      }
+      const data = await response.json();
+      setIncident(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <main className="flex-1 pt-8 p-6 lg:p-8 xl:p-10 max-w-5xl mx-auto w-full relative font-sans">
+        <div className="text-center text-[#bec9c2] py-10">Loading resolved incident...</div>
+      </main>
+    );
+  }
+
+  if (error || !incident) {
+    return (
+      <main className="flex-1 pt-8 p-6 lg:p-8 xl:p-10 max-w-5xl mx-auto w-full relative font-sans">
+        <div className="bg-[#ffb4ab]/10 border border-[#ffb4ab]/40 text-[#ffb4ab] rounded-lg px-4 py-3">
+          {error || 'Resolved incident not found'}
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex-1 pt-8 p-6 lg:p-8 xl:p-10 max-w-5xl mx-auto w-full relative font-sans">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="px-2 py-1 rounded bg-[#a6f2cf]/10 text-[#a6f2cf] font-mono text-xs uppercase tracking-wider border border-[#a6f2cf]/20">RESOLVED</span>
-            <h1 className="text-2xl font-semibold text-[#e0e3df] m-0">Incident Record #{id || '9942-A'}</h1>
+          <div className="flex items-center gap-3 mb-2 flex-wrap">
+            <span className="px-2 py-1 rounded bg-[#a6f2cf]/10 text-[#a6f2cf] font-mono text-xs uppercase tracking-wider border border-[#a6f2cf]/20">{incident.status || 'resolved'}</span>
+            <h1 className="text-2xl font-semibold text-[#e0e3df] m-0">Incident Record #{incident.id}</h1>
           </div>
           <p className="text-[#bec9c2] text-sm">Official post-incident resolution report.</p>
         </div>
@@ -33,24 +77,24 @@ export default function SolvedIncidentDetails() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <span className="block text-[#bec9c2] font-mono text-[11px] uppercase tracking-wider mb-1">REPORTER</span>
-              <span className="block text-[#e0e3df] text-[14px]">System_Auto_Guard</span>
+              <span className="block text-[#e0e3df] text-[14px]">{incident.source_name || 'Unknown'}</span>
             </div>
             <div>
               <span className="block text-[#bec9c2] font-mono text-[11px] uppercase tracking-wider mb-1">DATE RESOLVED</span>
-              <span className="block text-[#e0e3df] font-mono text-[14px]">2023-10-27</span>
+              <span className="block text-[#e0e3df] font-mono text-[14px]">{incident.timestamp || 'Unknown'}</span>
             </div>
             <div>
               <span className="block text-[#bec9c2] font-mono text-[11px] uppercase tracking-wider mb-1">CATEGORY</span>
-              <span className="block text-[#e0e3df] font-mono text-[14px]">Access Violation</span>
+              <span className="block text-[#e0e3df] font-mono text-[14px]">{incident.initial_severity || 'Medium'}</span>
             </div>
             <div>
               <span className="block text-[#bec9c2] font-mono text-[11px] uppercase tracking-wider mb-1">SECURITY LEVEL</span>
-              <span className="block text-[#a6f2cf] font-mono text-[14px]">High</span>
+              <span className="block text-[#a6f2cf] font-mono text-[14px]">{incident.final_severity || incident.initial_severity || 'Medium'}</span>
             </div>
           </div>
         </section>
 
-        {/* Simplified Detailed Solution */}
+        {/* Detailed Solution */}
         <section className="bg-[#1c201e]/70 backdrop-blur-[16px] border border-[#3f4943]/50 rounded-xl p-6 shadow-[0_12px_32px_0_rgba(2,8,16,0.6)]">
           <div className="border-b border-[#3f4943]/30 pb-4 mb-4">
             <h2 className="text-xl font-semibold text-[#e0e3df] m-0 flex items-center gap-2">
@@ -58,31 +102,16 @@ export default function SolvedIncidentDetails() {
               Detailed Solution Implemented
             </h2>
           </div>
-          
+
           <div className="space-y-4">
             <div className="bg-[#181c1a] border border-[#3f4943]/30 p-4 rounded-lg">
               <p className="text-[#e0e3df] text-[14px] leading-relaxed italic opacity-80 mb-4">
-                "Detected and blocked an attempted privilege escalation via a legacy database connector vulnerability."
+                {incident.routing_info?.final_admin_report || incident.ai_summary?.executive_summary || incident.description || 'No resolution summary available.'}
               </p>
-              
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-[#e0e3df] text-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#a6f2cf]"></span>
-                  Immediate disabling of compromised source credentials.
-                </li>
-                <li className="flex items-center gap-3 text-[#e0e3df] text-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#a6f2cf]"></span>
-                  Global perimeter firewall IP blacklisting of origin source.
-                </li>
-                <li className="flex items-center gap-3 text-[#e0e3df] text-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#a6f2cf]"></span>
-                  Legacy database connector successfully replaced with a secure encrypted alternative.
-                </li>
-                <li className="flex items-center gap-3 text-[#e0e3df] text-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#a6f2cf]"></span>
-                  Full system scan completed with zero additional anomalies found.
-                </li>
-              </ul>
+
+              <div className="text-sm text-[#bec9c2]">
+                Incident resolved and locked in compliance vault.
+              </div>
             </div>
           </div>
         </section>

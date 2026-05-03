@@ -10,3 +10,7 @@ sqlalchemy
 twilio
 httpx
 google-genai
+firebase-admin
+pyjwt
+python-jose[cryptography]
+passlib[bcrypt]

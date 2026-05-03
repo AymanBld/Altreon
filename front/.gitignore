@@ -12,11 +12,28 @@ dist
 dist-ssr
 *.local
 
+# Vite / build caches
+.vite/
+.cache/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Coverage / testing
+coverage/
+.nyc_output/
+
+# ESLint cache
+.eslintcache
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj

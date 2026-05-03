@@ -158,3 +158,36 @@ class AutoDraftReport(BaseModel):
     generated_summary: str = ""
     suggested_severity: str = "medium"
     requires_human_review: bool = True
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  ADMIN AUTHENTICATION MODELS
+# ═══════════════════════════════════════════════════════════════════
+
+class AdminRegister(BaseModel):
+    """Admin registration request."""
+    username: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(..., min_length=6)
+    email: Optional[str] = None
+
+
+class AdminLogin(BaseModel):
+    """Admin login request."""
+    username: str
+    password: str
+
+
+class AdminTokenResponse(BaseModel):
+    """Admin login response with token."""
+    access_token: str
+    token_type: str = "bearer"
+    username: str
+
+
+class AdminProfile(BaseModel):
+    """Admin profile data."""
+    admin_id: str
+    username: str
+    email: Optional[str] = None
+    fcm_device_token: Optional[str] = None
+    created_at: str

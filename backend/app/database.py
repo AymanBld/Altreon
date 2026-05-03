@@ -71,6 +71,16 @@ async def init_db():
                 matched_incident_id TEXT,
                 created_at TEXT
             );
+
+            CREATE TABLE IF NOT EXISTS admins (
+                admin_id TEXT PRIMARY KEY,
+                username TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                email TEXT,
+                fcm_device_token TEXT,
+                created_at TEXT,
+                updated_at TEXT
+            );
         """)
         await db.commit()
 
@@ -157,6 +167,23 @@ async def list_incidents(
         return [dict(r) for r in rows]
 
 
+async def get_recent_incidents(limit: int = 10, exclude_id: str = None) -> list[dict]:
+    """Get the most recent incidents for correlation analysis."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        query = "SELECT incident_id, user_summary, type, severity, created_at FROM incidents"
+        params = []
+        if exclude_id:
+            query += " WHERE incident_id != ?"
+            params.append(exclude_id)
+        query += " ORDER BY created_at DESC LIMIT ?"
+        params.append(limit)
+        
+        cursor = await db.execute(query, params)
+        rows = await cursor.fetchall()
+        return [dict(r) for r in rows]
+
+
 # ─── Audit Log ───────────────────────────────────────────────────
 
 async def save_audit_log(log: dict):
@@ -222,3 +249,68 @@ async def list_auto_drafts(reviewed: bool = False) -> list[dict]:
         )
         rows = await cursor.fetchall()
         return [dict(r) for r in rows]
+
+
+# ─── Admin CRUD ─────────────────────────────────────────────────
+
+async def create_admin(admin_id: str, username: str, password_hash: str, email: str = None) -> str:
+    """Create a new admin user."""
+    from datetime import datetime
+    now = datetime.utcnow().isoformat()
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        try:
+            await db.execute(
+                """INSERT INTO admins (admin_id, username, password_hash, email, created_at, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (admin_id, username, password_hash, email, now, now)
+            )
+            await db.commit()
+            return admin_id
+        except Exception:
+            raise
+
+
+async def get_admin_by_username(username: str) -> dict | None:
+    """Retrieve admin by username."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute(
+            "SELECT * FROM admins WHERE username = ?", (username,)
+        )
+        row = await cursor.fetchone()
+        return dict(row) if row else None
+
+
+async def get_admin_by_id(admin_id: str) -> dict | None:
+    """Retrieve admin by ID."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute(
+            "SELECT * FROM admins WHERE admin_id = ?", (admin_id,)
+        )
+        row = await cursor.fetchone()
+        return dict(row) if row else None
+
+
+async def update_admin_fcm_token(admin_id: str, fcm_token: str) -> bool:
+    """Update admin's FCM device token."""
+    from datetime import datetime
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            "UPDATE admins SET fcm_device_token = ?, updated_at = ? WHERE admin_id = ?",
+            (fcm_token, datetime.utcnow().isoformat(), admin_id)
+        )
+        await db.commit()
+    return True
+
+
+async def get_all_admin_fcm_tokens() -> list[str]:
+    """Get all active FCM tokens for push notifications."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute(
+            "SELECT fcm_device_token FROM admins WHERE fcm_device_token IS NOT NULL"
+        )
+        rows = await cursor.fetchall()
+        return [row["fcm_device_token"] for row in rows]
