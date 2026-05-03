@@ -3,9 +3,8 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ─── Change this to match your backend URL ─────────────────────────────────────
-// For local testing on Android emulator, use 10.0.2.2 instead of 127.0.0.1
-const String kApiBase = 'http://10.0.2.2:8000';
+// ─── API Host ─────────────────────────────────────────────────────────────────
+const String kApiBase = 'https://altreon.onrender.com';
 
 // ─── Models ───────────────────────────────────────────────────────────────────
 
@@ -46,8 +45,7 @@ class Incident {
     this.conversationLog = const [],
   });
 
-  String get severity =>
-      baseSeverity ?? finalSeverity ?? initialSeverity ?? 'Pending';
+  String get severity => baseSeverity ?? finalSeverity ?? initialSeverity ?? 'Pending';
 
   bool get isResolved => status == 'resolved';
 
@@ -55,12 +53,9 @@ class Incident {
     final rawLog = json['conversation_log'];
     List<ConversationMessage> log = [];
     if (rawLog is List) {
-      log = rawLog
-          .whereType<Map<String, dynamic>>()
-          .map(ConversationMessage.fromJson)
-          .toList();
+      log = rawLog.whereType<Map<String, dynamic>>().map(ConversationMessage.fromJson).toList();
     }
-    
+
     Map<String, dynamic>? fusion;
     if (json['soc_fusion'] is Map<String, dynamic>) {
       fusion = json['soc_fusion'];
@@ -125,43 +120,29 @@ class ApiService {
   }
 
   static Future<List<Incident>> fetchAllIncidents() async {
-    final response = await http
-        .get(Uri.parse('$kApiBase/reports/admin/all'))
-        .timeout(const Duration(seconds: 10));
+    final response = await http.get(Uri.parse('$kApiBase/reports/admin/all')).timeout(const Duration(seconds: 10));
     if (response.statusCode != 200) {
       throw Exception('Failed to load incidents (${response.statusCode})');
     }
     final List<dynamic> data = json.decode(response.body) as List<dynamic>;
-    return data
-        .whereType<Map<String, dynamic>>()
-        .map(Incident.fromJson)
-        .toList();
+    return data.whereType<Map<String, dynamic>>().map(Incident.fromJson).toList();
   }
 
   static Future<List<Incident>> fetchResolvedIncidents() async {
-    final response = await http
-        .get(Uri.parse('$kApiBase/reports/admin/resolved'))
-        .timeout(const Duration(seconds: 10));
+    final response = await http.get(Uri.parse('$kApiBase/reports/admin/resolved')).timeout(const Duration(seconds: 10));
     if (response.statusCode != 200) {
-      throw Exception(
-          'Failed to load resolved incidents (${response.statusCode})');
+      throw Exception('Failed to load resolved incidents (${response.statusCode})');
     }
     final List<dynamic> data = json.decode(response.body) as List<dynamic>;
-    return data
-        .whereType<Map<String, dynamic>>()
-        .map(Incident.fromJson)
-        .toList();
+    return data.whereType<Map<String, dynamic>>().map(Incident.fromJson).toList();
   }
 
   static Future<Incident> fetchIncident(int id) async {
-    final response = await http
-        .get(Uri.parse('$kApiBase/incident/$id'))
-        .timeout(const Duration(seconds: 10));
+    final response = await http.get(Uri.parse('$kApiBase/incident/$id')).timeout(const Duration(seconds: 10));
     if (response.statusCode != 200) {
       throw Exception('Failed to load incident (${response.statusCode})');
     }
-    return Incident.fromJson(
-        json.decode(response.body) as Map<String, dynamic>);
+    return Incident.fromJson(json.decode(response.body) as Map<String, dynamic>);
   }
 
   static Future<void> submitResolution({
@@ -180,10 +161,10 @@ class ApiService {
         )
         .timeout(const Duration(seconds: 10));
     if (response.statusCode != 200) {
-      throw Exception(
-          'Failed to submit resolution (${response.statusCode})');
+      throw Exception('Failed to submit resolution (${response.statusCode})');
     }
   }
+
   static Future<bool> login(String username, String password) async {
     try {
       final response = await http
@@ -200,11 +181,11 @@ class ApiService {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         _authToken = data['access_token'];
-        
+
         // Save to local storage
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', _authToken!);
-        
+
         return true;
       }
       return false;

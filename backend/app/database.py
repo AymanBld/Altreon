@@ -7,6 +7,15 @@ import aiosqlite
 import json
 from pathlib import Path
 
+import os
+
+# Create a path that points to a 'data' folder
+# This folder will be linked to Render's persistent storage
+DB_DIR = "/opt/render/project/src/data"
+if not os.path.exists(DB_DIR):
+    os.makedirs(DB_DIR)
+DATABASE_URL = f"sqlite:///{DB_DIR}/sql_app.db"
+
 DB_PATH = Path(__file__).parent.parent / "altreon.db"
 
 
