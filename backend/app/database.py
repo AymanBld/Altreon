@@ -9,14 +9,15 @@ from pathlib import Path
 
 import os
 
-# Create a path that points to a 'data' folder
-# This folder will be linked to Render's persistent storage
-DB_DIR = "/opt/render/project/src/data"
-if not os.path.exists(DB_DIR):
-    os.makedirs(DB_DIR)
-DATABASE_URL = f"sqlite:///{DB_DIR}/sql_app.db"
+# DB_DIR = "/opt/render/project/src/data"
+BASE_DIR = Path(__file__).resolve().parent
+if not os.path.exists(BASE_DIR):
+    os.makedirs(BASE_DIR)
+# DATABASE_URL = f"sqlite:///{DB_DIR}/sql_app.db"
+# DB_PATH = Path(__file__).parent.parent / "altreon.db"
+DB_PATH = BASE_DIR / "your_database_name.db"
+DATABASE_URL = str(DB_PATH)
 
-DB_PATH = Path(__file__).parent.parent / "altreon.db"
 
 
 async def init_db():
