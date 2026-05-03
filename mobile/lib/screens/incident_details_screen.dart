@@ -15,7 +15,6 @@ class IncidentDetailsScreen extends StatefulWidget {
 
 class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
   Incident? _incident;
-  List<Incident> _relatedIncidents = [];
   bool _loading = true;
   String? _error;
   Timer? _pollTimer;
@@ -39,14 +38,10 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
         _incident = data;
         _loading = false;
       });
-      
+
       // If AI Summary is still default/missing, poll for updates
       if (data.aiSummary == null || data.aiSummary!.contains('No direct patterns found')) {
         _startPolling();
-      }
-
-      if (data.aiSummary != null && data.aiSummary!.contains('Related Incidents:')) {
-        await _fetchRelated(data.aiSummary!);
       }
     } catch (e) {
       setState(() {
@@ -68,13 +63,10 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
               _incident = data;
               _loading = false;
             });
-            if (data.aiSummary != null && data.aiSummary!.contains('Related Incidents:')) {
-              await _fetchRelated(data.aiSummary!);
-            }
           }
         }
       } catch (_) {}
-      
+
       if (timer.tick > 15) timer.cancel(); // Stop after 45s
     });
   }
@@ -87,33 +79,12 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
     }
   }
 
-  Future<void> _fetchRelated(String summary) async {
-    try {
-      final part = summary.split('Related Incidents:').last.trim();
-      final ids = RegExp(r'\d+').allMatches(part)
-          .map((m) => int.parse(m.group(0)!))
-          .where((id) => id != widget.incidentId) // Don't fetch self
-          .toList();
-      
-      final List<Incident> related = [];
-      for (final id in ids) {
-        try {
-          final inc = await ApiService.fetchIncident(id);
-          related.add(inc);
-        } catch (_) {}
-      }
-      setState(() => _relatedIncidents = related);
-    } catch (e) {
-      debugPrint('Error fetching related: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.bgPrimary,
       appBar: AppBar(
-        title:  Text('Altreon Admin - Incident #${widget.incidentId}'),
+        title: Text('Altreon Admin - Incident #${widget.incidentId}'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -142,23 +113,6 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
           _buildInfoSection(inc),
           const SizedBox(height: 16),
           _buildConversationSection(inc),
-          if (_relatedIncidents.isNotEmpty) ...[
-            const SizedBox(height: 24),
-            const Divider(color: AppTheme.border, thickness: 1),
-            const SizedBox(height: 16),
-            const Row(
-              children: [
-                Icon(Icons.link, color: AppTheme.accent, size: 20),
-                SizedBox(width: 8),
-                Text(
-                  'RELATED INCIDENT LOGS',
-                  style: TextStyle(color: AppTheme.textMuted, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.2),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            ..._relatedIncidents.map((related) => _buildRelatedIncidentCard(related)),
-          ],
           const SizedBox(height: 24),
           _buildActionSection(inc),
           const SizedBox(height: 32),
@@ -186,8 +140,12 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
           const SizedBox(height: 8),
           Row(
             children: [
-              Expanded(child: MetaRow(label: 'Reporter', value: '${inc.sourceType == 'user' ? 'Employee' : 'System'} (${inc.sourceName})')),
-              Expanded(child: MetaRow(label: 'Security Level', value: inc.severity, valueColor: SeverityStyle.fromString(inc.severity).color)),
+              Expanded(
+                  child: MetaRow(
+                      label: 'Reporter', value: '${inc.sourceType == 'user' ? 'Employee' : 'System'} (${inc.sourceName})')),
+              Expanded(
+                  child: MetaRow(
+                      label: 'Security Level', value: inc.severity, valueColor: SeverityStyle.fromString(inc.severity).color)),
             ],
           ),
           Row(
@@ -296,7 +254,8 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
               fillColor: AppTheme.surfaceTop,
               filled: true,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
-              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: AppTheme.accent, width: 1)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: AppTheme.accent, width: 1)),
             ),
           ),
           const SizedBox(height: 12),
@@ -317,6 +276,7 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
       ),
     );
   }
+
   Widget _buildActionSection(Incident inc) {
     return Column(
       children: [
@@ -334,7 +294,9 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
 
   Widget _buildAIReportSection(Incident inc) {
     final isCorrelated = inc.isCorrelated;
-    final summary = inc.aiSummary ?? 'AI Analysis in progress...';
+    final summary = _summaryWithoutRelatedIncidents(
+      inc.aiSummary ?? 'AI Analysis in progress...',
+    );
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -366,46 +328,7 @@ class _IncidentDetailsScreenState extends State<IncidentDetailsScreen> {
     );
   }
 
-  Widget _buildRelatedIncidentCard(Incident related) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceTop.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.border, width: 0.5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('INC-#${related.id}', style: const TextStyle(color: AppTheme.accent, fontWeight: FontWeight.bold, fontSize: 12)),
-              Text(related.timestamp?.split('T').first ?? '', style: const TextStyle(color: AppTheme.textFaint, fontSize: 10)),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            related.description ?? 'No description',
-            style: TextStyle(color: AppTheme.textPrimary, fontSize: 12),
-          ),
-          if (related.conversationLog.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            const Text('LOG HISTORY:', style: TextStyle(color: AppTheme.textFaint, fontSize: 9, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 4),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(4)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: related.conversationLog.take(2).map((m) => Text('${m.role.toUpperCase()}: ${m.content}', style: const TextStyle(color: AppTheme.textMuted, fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis)).toList(),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
+  String _summaryWithoutRelatedIncidents(String summary) {
+    return summary.split('Related Incidents:').first.trim();
   }
 }
-
