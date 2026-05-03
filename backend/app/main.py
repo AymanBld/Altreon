@@ -126,6 +126,143 @@ def normalize_existing_statuses():
 ensure_status_column()
 normalize_existing_statuses()
 
+
+def seed_presentation_data():
+    """Seed demo incidents for presentations when the Render SQLite DB is empty."""
+    seed_enabled = os.getenv("SEED_DEMO_DATA", "true").strip().lower() not in {"0", "false", "no"}
+    if not seed_enabled:
+        return
+
+    db = SessionLocal()
+    try:
+        if db.query(IncidentLog).count() > 0:
+            return
+
+        now = datetime.utcnow()
+        sample_incidents = [
+            IncidentLog(
+                timestamp=now - timedelta(minutes=18),
+                source_type="user",
+                source_name="employee",
+                device_ip="10.42.12.18",
+                description="Employee reported a fake Microsoft 365 login page after clicking a payroll update email.",
+                base_severity="High",
+                final_severity="High",
+                status="not resolved",
+                is_processed=True,
+                conversation_log=json.dumps([
+                    {"role": "user", "content": "I clicked a payroll link and it asked me to sign in again."},
+                    {"role": "assistant", "content": "Did you enter your password or MFA code?"},
+                    {"role": "user", "content": "I entered my password, then the page went blank."},
+                ]),
+                ai_summary=(
+                    "AI ANALYSIS: Likely credential phishing targeting Microsoft 365. "
+                    "The reporter submitted credentials to a suspicious payroll-themed domain. "
+                    "Recommended actions: reset password, revoke sessions, review mail rules, and block sender/domain."
+                ),
+            ),
+            IncidentLog(
+                timestamp=now - timedelta(hours=1, minutes=7),
+                source_type="auto",
+                source_name="edr",
+                device_ip="10.42.12.44",
+                description="EDR detected suspicious PowerShell execution with encoded command and outbound beacon attempts.",
+                base_severity="Critical",
+                final_severity="Critical",
+                status="not resolved",
+                is_processed=True,
+                ai_summary=(
+                    "AI ANALYSIS: Critical endpoint compromise indicators detected. "
+                    "Encoded PowerShell execution and repeated outbound beacon attempts suggest malware staging. "
+                    "Recommended actions: isolate host, collect memory image, rotate local credentials, and hunt for lateral movement."
+                ),
+            ),
+            IncidentLog(
+                timestamp=now - timedelta(hours=3, minutes=35),
+                source_type="auto",
+                source_name="firewall",
+                device_ip="10.42.8.91",
+                description="Firewall blocked repeated failed VPN logins from a foreign ASN against a finance user account.",
+                base_severity="Medium",
+                final_severity="Medium",
+                status="not resolved",
+                is_processed=True,
+                ai_summary=(
+                    "AI ANALYSIS: Possible credential stuffing against VPN. "
+                    "No successful login was observed, but the targeted account is high-value. "
+                    "Recommended actions: confirm MFA health, notify account owner, and temporarily rate-limit source ranges."
+                ),
+            ),
+            IncidentLog(
+                timestamp=now - timedelta(days=1, hours=2),
+                source_type="user",
+                source_name="employee",
+                device_ip="10.42.14.20",
+                description="User reported that a confidential customer export was accidentally shared with an external email address.",
+                base_severity="High",
+                final_severity="High",
+                status="resolved",
+                is_processed=True,
+                ai_summary=(
+                    "AI ANALYSIS: Confirmed accidental data exposure. "
+                    "The shared file contained customer contact data but no payment details. "
+                    "Recommended actions completed: revoked link, notified data owner, and documented compliance review."
+                ),
+                final_admin_report=(
+                    "External share link was revoked, recipient deletion was confirmed, and the affected dataset was reviewed. "
+                    "No regulated payment or authentication data was exposed. Case closed with awareness follow-up."
+                ),
+            ),
+            IncidentLog(
+                timestamp=now - timedelta(days=2, hours=5),
+                source_type="auto",
+                source_name="antivirus",
+                device_ip="10.42.16.77",
+                description="Antivirus quarantined a malicious attachment downloaded from a personal webmail session.",
+                base_severity="Low",
+                final_severity="Low",
+                status="resolved",
+                is_processed=True,
+                ai_summary=(
+                    "AI ANALYSIS: Malware was blocked before execution. "
+                    "No persistence, suspicious process tree, or network callback was detected after quarantine."
+                ),
+                final_admin_report=(
+                    "Attachment quarantined successfully. Full endpoint scan completed with no additional findings. "
+                    "User received reminder to avoid personal webmail on corporate devices."
+                ),
+            ),
+        ]
+
+        db.add_all(sample_incidents)
+        db.commit()
+        print(f"Seeded {len(sample_incidents)} presentation incidents.")
+    finally:
+        db.close()
+
+
+async def seed_demo_admin():
+    """Optionally create a demo admin when DEMO_ADMIN_PASSWORD is configured."""
+    demo_password = os.getenv("DEMO_ADMIN_PASSWORD")
+    import app.database as database
+
+    await database.init_db()
+    if not demo_password:
+        return
+
+    demo_username = os.getenv("DEMO_ADMIN_USERNAME", "admin")
+    existing = await database.get_admin_by_username(demo_username)
+    if existing:
+        return
+
+    await database.create_admin(
+        str(uuid.uuid4()),
+        demo_username,
+        hash_password(demo_password),
+        os.getenv("DEMO_ADMIN_EMAIL"),
+    )
+    print(f"Seeded demo admin user '{demo_username}'.")
+
 def format_incident(incident: IncidentLog) -> dict:
     """Standardized incident formatter for all API responses."""
     return {
@@ -414,7 +551,8 @@ print(f"DEBUG: FCM_ENABLED = {os.getenv('FCM_ENABLED')}")
 
 @app.on_event("startup")
 async def startup_event():
-    pass
+    seed_presentation_data()
+    await seed_demo_admin()
 
 # ==========================================
 # Endpoints
