@@ -496,13 +496,22 @@ app = FastAPI(title="ALTREON - Cyber Triage MVP")
 FRONTEND_DIST = Path(__file__).resolve().parents[2] / "front" / "dist"
 FRONTEND_INDEX = FRONTEND_DIST / "index.html"
 FRONTEND_ASSETS = FRONTEND_DIST / "assets"
+CORS_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:5173,http://127.0.0.1:5173,https://altreon.vercel.app",
+    ).split(",")
+    if origin.strip()
+]
 
 if FRONTEND_ASSETS.exists():
     app.mount("/assets", StaticFiles(directory=FRONTEND_ASSETS), name="frontend-assets")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
